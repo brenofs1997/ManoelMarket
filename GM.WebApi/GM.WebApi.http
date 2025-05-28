@@ -1,0 +1,6 @@
+@GM.WebApi_HostAddress = http://localhost:5217
+
+GET {{GM.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

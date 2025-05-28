@@ -1,0 +1,41 @@
+# Build
+bin/
+obj/
+
+# Visual Studio
+.vscode/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# Secrets
+appsettings.*.json
+secrets.json
+.env
+
+# Docker
+*.tar
+*.pid
+
+# Runtime files
+*.db
+*.db-shm
+*.db-wal
+
+# Publish output
+publish/
+*.publish.xml
+
+# Node (caso tenha parte frontend)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Others
+Thumbs.db
+.DS_Store
