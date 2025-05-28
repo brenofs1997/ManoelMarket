@@ -40,12 +40,62 @@ namespace GM.WebApi.Tests.Controllers
         [Fact]
         public async Task Post_Created()
         {
-            manager.SalvarPedidosAsync(Arg.Any<List<Pedido>>()).Returns(Task.CompletedTask);
+            var produtos = new List<Produto>
+            {
+                new Produto
+                {
+                    Produto_Id = "PS5",
+                    DimensoesId = 1,
+                    CaixaId = "1",
+                    Dimensoes = new Dimensoes
+                    {
+                        Id = 1,
+                        Altura = 10,
+                        Largura = 10,
+                        Comprimento = 20
+                    }
+                }
+            };
 
-            var resultado = (ObjectResult)await controller.Post(Arg.Any<PedidoRequest>());
+            var pedido = new Pedido
+            {
+                Pedido_Id = 1,
+                Produtos = produtos
+            };
 
+            var request = new PedidoRequest
+            {
+                Pedidos = new List<Pedido> { pedido }
+            };
+
+            var caixasDisponiveis = new List<Caixa>
+            {
+                new Caixa { CaixaId = "CX1", Dimensoes = new Dimensoes { Altura = 50, Largura = 50, Comprimento = 50 }, Produtos = new List<Produto>() }
+            };
+
+            var caixasEmpacotadas = new List<Caixa>
+            {
+                new Caixa
+                {
+                    CaixaId = "CX1",
+                    Dimensoes = new Dimensoes { Altura = 50, Largura = 50, Comprimento = 50 },
+                    Produtos = produtos,
+                    Observacao = null
+                }
+            };
+
+            manager.GetCaixaAsync().Returns(caixasDisponiveis);
+            service.Empacotar(produtos, caixasDisponiveis).Returns(caixasEmpacotadas);
+
+           
+            var result = await controller.Post(request);
+
+           
             await manager.Received().SalvarPedidosAsync(Arg.Any<List<Pedido>>());
-            resultado.StatusCode.Should().Be(StatusCodes.Status201Created);
+            await manager.Received(3).SalvarCaixaAsync(Arg.Any<Caixa>()); // As três caixas fixas do controller
+            result.Should().BeOfType<OkObjectResult>();
+            var okResult = result as OkObjectResult;
+            okResult.StatusCode.Should().Be(StatusCodes.Status200OK);
         }
     }
 }
