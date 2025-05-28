@@ -13,8 +13,8 @@ Este projeto é uma API .NET que recebe pedidos com produtos e retorna as caixas
 ---
 
 ### ⚙️ Subindo o ambiente
-
-Execute o seguinte comando na raiz do projeto:
+- Altere as propriedades de secret e senha do banco para os valores desejados no arquivo do docker-compose
+- Execute o seguinte comando na raiz do projeto:
 
 ```bash
 docker compose up --build
